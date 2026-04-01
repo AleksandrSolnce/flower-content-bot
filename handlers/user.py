@@ -1,10 +1,19 @@
 from aiogram import Router, F
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, Message
 from config import PRODUCTS, CARD_NUMBER, CARD_HOLDER, ADMIN_ID
 from database import create_order
-from keyboards import get_payment_keyboard
+from keyboards import get_payment_keyboard, get_main_menu
 
 router = Router()
+
+@router.message(F.text == "/start")
+async def cmd_start(message: Message):
+    await message.answer(
+        "🌸 Добро пожаловать в **Цветочный Контент**!\n\n"
+        "Выберите товар:",
+        reply_markup=get_main_menu(),
+        parse_mode="Markdown"
+    )
 
 @router.callback_query(F.data.startswith("buy_"))
 async def process_buy(callback: CallbackQuery):
